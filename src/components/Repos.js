@@ -35,15 +35,29 @@ const Repos = () => {
     })
     .map((item) => {
       return { ...item, value: item.stars };
-    }).slice(0,5);
-
-    const most = Object.values(languages)
-    .sort((a, b) => {
-      return b.stars - a.stars;
     })
-    .map((item) => {
-      return { ...item, value: item.stars };
-    }).slice(0,5);
+    .slice(0, 5);
+
+  //stars.forks
+  let { stars, forks} = gitRepos.reduce(
+    (total, item) => {
+      const {stargazers_count, name, forks } = item;
+      console.log(item);
+      total.stars[name] = { label: name, value: stargazers_count};
+      total.forks[name] = { label: name, value: forks };
+      return total;
+    },
+    {
+      stars: {},
+      forks: {},
+    }
+  );
+
+  //stars
+  stars=Object.values(stars).slice(-5).reverse();
+  //console.log(stars);
+
+ // console.log(stars);
 
   const chartData = [
     {
@@ -77,7 +91,7 @@ const Repos = () => {
       <Wrapper className="section-center">
         <ExampleChart data={chartData} ctype={"pie3d"} />
         <Doughnut2D data={mostUsed} />
-        <Column3D data={mostUsed} />
+        <Column3D data={stars} />
         <Bar3D data={mostUsed} />
       </Wrapper>
     </section>
